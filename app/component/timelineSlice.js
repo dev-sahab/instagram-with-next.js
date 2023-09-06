@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchPosts } from "./timelineApiSlice.js";
-
+import { createPost, fetchPosts } from "./timelineApiSlice.js";
 
 const timelineSlice = createSlice({
   name: "post",
@@ -12,13 +11,17 @@ const timelineSlice = createSlice({
   },
   reducers: {
     setShowModal: (state, action) => {
-      state.showModal = action.payload
+      state.showModal = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchPosts.fulfilled, (state, action) => {
-      state.post = action.payload;
-    });
+    builder
+      .addCase(fetchPosts.fulfilled, (state, action) => {
+        state.post = action.payload;
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.post.push(action.payload.post);
+      });
   },
 });
 

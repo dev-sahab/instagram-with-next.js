@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./PostModal.scss";
 import { CiLocationOn } from "react-icons/ci";
 import { GrDown } from "react-icons/gr";
@@ -23,6 +23,7 @@ import loading from "@/public/img/loader.svg";
 import Image from "next/image.js";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPost, setShowModal } from "@/app/component/timelineSlice.js";
+import { createPost } from "@/app/component/timelineApiSlice.js";
 
 const PostModal = () => {
   const dispatch = useDispatch();
@@ -36,41 +37,53 @@ const PostModal = () => {
 
   // data management hooks
   const fileRef = useRef(null); // get input field
-  const [fileInput, setFileInput] = useState(null); // set file input for click event
-  const [images, setImages] = useState([]); // set images
-  const [countChar, setCountChar] = useState(0); // count of characters
   const [expendCard, setExpendCard] = useState(false); // expend card & submit form
   const [showLoader, setShowLoader] = useState(false); // show loader
+  const [input, setInput] = useState({
+    location: "",
+    post: "",
+    photos: [],
+    characterCount: 0,
+  });
 
-  useEffect(() => {
-    setFileInput(fileRef.current); // set file input for click event
-  }, [setFileInput]);
+  const handleSelectPhoto = () => {
+    fileRef.current.click();
+  };
 
   // set images from file input field
   const handleFileChange = (e) => {
-    setImages(Array.from(e.target.files));
+    setInput((prevState) => ({
+      ...prevState,
+      photos: Array.from(e.target.files),
+    }));
   };
 
   // delete image handler for delete unwanted image
   const handleDeletePhoto = (img) => {
-    const updatedList = images.filter((data) => data !== img);
-    setImages(updatedList);
+    const updatedList = input.photos.filter((data) => data !== img);
+    setInput((prevState) => ({
+      ...prevState,
+      photos: updatedList,
+    }));
 
     if (updatedList.length === 0) {
       setExpendCard(false);
     }
   };
 
-  // get value from input field
+  // get value from input fields
   const handlePostOnchange = (e) => {
-    setPostData((prevState) => ({
+    setInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
 
     // character counter in post
     if (e.target.name === "post") {
-      setCountChar(e.target.value.length);
+      setInput((prevState) => ({
+        ...prevState,
+        characterCount: e.target.value.length,
+      }));
     }
   };
 
@@ -79,46 +92,18 @@ const PostModal = () => {
 
     setShowLoader(true); // show loader
 
-    // map the images to an array of upload promises
-    const uploadPromises = images.map((img, index) => {
-      // init a new FormData object
-      const data = new FormData();
+    // set some post data
+    dispatch(
+      createPost({
+        photos: input.photos,
+        location: input.location,
+        post: input.post,
+      })
+    );
 
-      // add image to FormData object
-      data.append("file", img);
-      data.append("upload_preset", "insta_photo");
-      data.append("cloud_name", CLOUD_NAME);
+    setShowLoader(false); // hide loader
 
-      // upload image to cloudinary and return the promise
-      return axios.post(`${CLOUDINARY_URL}/image/upload`, data).then((res) => {
-        // store image url in array
-        return { id: res.data.public_id, url: res.data.secure_url };
-      });
-    });
-
-    // wait for all upload promises to resolve
-    Promise.all(uploadPromises).then((results) => {
-      // set some post data
-      const finalData = {
-        likes: 0,
-        comments: 0,
-        time: new Date().getTime(),
-        photos: results,
-      };
-
-      axios.post(`http://localhost:5050/posts `, finalData).then((res) => {
-        setPostData((prevState) => ({
-          ...prevState,
-          post: "",
-          location: "",
-          photos: [],
-        }));
-
-        setShowLoader(false); // hide loader
-
-        dispatch(setShowModal(false)); // hide modal
-      });
-    });
+    dispatch(setShowModal(false)); // hide modal
   };
 
   return (
@@ -137,7 +122,7 @@ const PostModal = () => {
             )}
             <div
               className={`card ${
-                expendCard && images.length > 0 ? "expend" : ""
+                expendCard && input.photos.length > 0 ? "expend" : ""
               }`}
             >
               <div className="card-header">
@@ -145,24 +130,24 @@ const PostModal = () => {
                 {expendCard ? (
                   <button onClick={handleSubmit}>Share</button>
                 ) : (
-                  images.length > 0 && (
+                  input.photos.length > 0 && (
                     <button onClick={() => setExpendCard(true)}>Next</button>
                   )
                 )}
               </div>
               <div
                 className={`card-body ${
-                  expendCard && images.length > 0 ? "expend" : ""
+                  expendCard && input.photos.length > 0 ? "expend" : ""
                 }`}
               >
-                {!images || images.length === 0 ? (
+                {!input.photos || input.photos.length === 0 ? (
                   <div className="img-selector">
                     <div className="img-placeholder">
                       <Image src={photoUpload} alt="" />
                     </div>
                     <div className="selector">
                       <h2>Drag photos and videos here</h2>
-                      <button onClick={() => fileInput.click()}>
+                      <button onClick={handleSelectPhoto}>
                         Select from computer
                       </button>
                       <input
@@ -190,7 +175,7 @@ const PostModal = () => {
                         modules={[Keyboard, Pagination, Navigation]}
                         className="mySwiper"
                       >
-                        {images.map((image, index) => {
+                        {input.photos.map((image, index) => {
                           return (
                             <SwiperSlide key={index}>
                               <Image
@@ -226,7 +211,7 @@ const PostModal = () => {
                           <textarea
                             name="post"
                             placeholder="Write a caption..."
-                            value={postData.post}
+                            value={input.post}
                             onChange={handlePostOnchange}
                           ></textarea>
                         </div>
@@ -235,7 +220,7 @@ const PostModal = () => {
                             <Image src={imoji} alt="" />
                           </div>
                           <div className="counter">
-                            <span>{countChar} / 2,200</span>
+                            <span>{input.characterCount} / 2,200</span>
                           </div>
                         </div>
                         <div className="location">
@@ -244,6 +229,7 @@ const PostModal = () => {
                               type="text"
                               placeholder="Add Location"
                               name="location"
+                              value={input.location}
                               onChange={handlePostOnchange}
                             />
                           </div>

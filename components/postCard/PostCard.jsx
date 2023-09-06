@@ -5,13 +5,12 @@ import "./PostCard.scss";
 import message from "@/public/img/message.svg";
 import notification from "@/public/img/notification.svg";
 import dot from "@/public/img/dots_dark.svg";
-import ali1 from "@/public/img/ali_post1.jpg";
 import liked from "@/public/img/liked.svg";
 import comment from "@/public/img/comment.svg";
 import save from "@/public/img/save.svg";
 import imoji from "@/public/img/imoji.svg";
 
-export default function PostCard({ user }) {
+export default function PostCard({ user, postData }) {
   return (
     <>
       <article>
@@ -34,9 +33,9 @@ export default function PostCard({ user }) {
                   <span className="dot">•</span>
                   <span className="time">22h</span>
                 </div>
-                {user?.location && (
+                {postData?.location && (
                   <div className="desc">
-                    <span>Place || Original audio</span>
+                    <span>{postData.location}</span>
                   </div>
                 )}
               </div>
@@ -50,7 +49,7 @@ export default function PostCard({ user }) {
           <div className="post">
             <div className="image-post">
               <div className="img-wrapper">
-                <Image src={ali1} alt="Ali" />
+                {/* <Image src={postData.photos} alt="Ali" /> */}
               </div>
             </div>
           </div>
@@ -85,12 +84,12 @@ export default function PostCard({ user }) {
             <div className="post-content">
               <div className="content-wrapper">
                 <div className="auth-username">
-                  <span>shuvoalways</span>
+                  <span>{user?.username}</span>
                 </div>
                 <div className="content">
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Nemo, debitis.
+                  <p>{
+                    postData.post
+                    }
                   </p>
                 </div>
               </div>
