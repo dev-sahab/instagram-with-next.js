@@ -1,6 +1,9 @@
+"use client";
 import LeftSidebar from "@/components/leftSidebar/LeftSidebar.jsx";
 import "./globals.css";
 import { Open_Sans } from "next/font/google";
+import { Provider } from "react-redux";
+import store from "@/store/store.js";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -13,8 +16,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={openSans.className}>
-        <LeftSidebar />
-        {children}
+        <Provider store={store}>
+          <LeftSidebar />
+          {children}
+        </Provider>
       </body>
     </html>
   );
