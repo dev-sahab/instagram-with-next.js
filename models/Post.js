@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const PostSchema = mongoose.Schema(
   {
     post: {
@@ -39,4 +38,4 @@ const PostSchema = mongoose.Schema(
 );
 
 // export
-export default mongoose.model("Post", PostSchema);
+export default mongoose.models.Post || mongoose.model("Post", PostSchema);

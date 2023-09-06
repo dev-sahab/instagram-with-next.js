@@ -12,7 +12,7 @@ import story6 from "@/public/img/story6.jpg";
 // components
 import PostModal from "@/components/PostModal/PostModal.jsx";
 import RightSidebar from "@/components/rightSidebar/RightSidebar.jsx";
-import PostCard from "@/components/postCard/PostCard.jsx";
+import Timeline from "./component/Timeline.jsx";
 
 export default function Home() {
   return (
@@ -83,16 +83,16 @@ export default function Home() {
               </div>
             </div>
 
-            <PostCard />
-            <PostCard />
-            <PostCard />
+            <div className="post-timeline">
+              <Timeline />
+            </div>
           </div>
 
           <RightSidebar />
         </div>
       </div>
 
-      {/* <PostModal /> */}
+      <PostModal />
     </>
   );
 }

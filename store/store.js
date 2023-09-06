@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import postReducer from "@/components/PostModal/postSlice.js";
+import postReducer from "@/app/component/timelineSlice.js";
 
 const store = configureStore({
   reducer: {
-    post: postReducer,
+    posts: postReducer,
   },
   devTools: true,
 });

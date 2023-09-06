@@ -14,8 +14,14 @@ import moreMenu from "@/public/img/more.svg";
 import message from "@/public/img/message.svg";
 import notification from "@/public/img/notification.svg";
 import profileImg from "@/public/img/shahab.jpg";
+import { useDispatch } from "react-redux";
+import { setShowModal } from "@/app/component/timelineSlice.js";
 
 export default function LeftSidebar() {
+  const dispatch = useDispatch();
+  const handleModalShow = () => {
+    dispatch(setShowModal(true));
+  };
   return (
     <>
       <aside>
@@ -75,10 +81,7 @@ export default function LeftSidebar() {
                 </Link>
               </li>
               <li className="menu-list">
-                <button
-                  className="menu-item"
-                  onClick={() => alert("create post")}
-                >
+                <button className="menu-item" onClick={handleModalShow}>
                   <span className="icon">
                     <Image src={create} alt="" />
                   </span>
