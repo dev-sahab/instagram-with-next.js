@@ -15,11 +15,11 @@ import "swiper/css/navigation";
 import { Keyboard, Pagination, Navigation } from "swiper/modules";
 
 // import images/svg
-import close from "../../img/close.svg";
-import photoUpload from "../../img/photo-upload.svg";
-import profile from "../../img/shahab.jpg";
-import imoji from "../../img/imoji.svg";
-import loading from "../../img/loader.svg";
+import close from "@/public/img/close.svg";
+import photoUpload from "@/public/img/photo-upload.svg";
+import profile from "@/public/img/shahab.jpg";
+import imoji from "@/public/img/imoji.svg";
+import loading from "@/public/img/loader.svg";
 import Image from "next/image.js";
 
 const PostModal = ({ action }) => {
@@ -31,7 +31,15 @@ const PostModal = ({ action }) => {
   const [expendCard, setExpendCard] = useState(false); // expend card & submit form
   const [showLoader, setShowLoader] = useState(false); // show loader
 
-  const [postData, setPostData] = useState({}); // post data
+  const [postData, setPostData] = useState({
+    username: "shahab.insta",
+    name: "Md Shahab Uddin",
+    profileImg:
+      "https://res.cloudinary.com/dtpp4gleq/image/upload/v1676271269/Shahab_jymhye.jpg",
+    post: "",
+    location: "",
+    photos: [],
+  }); // post data
 
   useEffect(() => {
     setFileInput(fileRef.current); // set file input for click event
@@ -67,6 +75,8 @@ const PostModal = ({ action }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    
   };
 
   return (
@@ -74,7 +84,7 @@ const PostModal = ({ action }) => {
       <section id="modal">
         <div className="modal-overlay"></div>
         <div className="modal-container">
-          <button className="close" onClick={() => action(false)}>
+          <button className="close" onClick={() => setShow(false)}>
             <Image src={close} alt="" />
           </button>
           {showLoader && (
@@ -96,7 +106,6 @@ const PostModal = ({ action }) => {
                   <button onClick={() => setExpendCard(true)}>Next</button>
                 )
               )}
-
             </div>
             <div
               className={`card-body ${
