@@ -76,7 +76,49 @@ const PostModal = ({ action }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
+    setShowLoader(true); // show loader
+
+    // map the images to an array of upload promises
+    const uploadPromises = images.map((img, index) => {
+      // init a new FormData object
+      const data = new FormData();
+
+      // add image to FormData object
+      data.append("file", img);
+      data.append("upload_preset", "insta_photo");
+      data.append("cloud_name", CLOUD_NAME);
+
+      // upload image to cloudinary and return the promise
+      return axios.post(`${CLOUDINARY_URL}/image/upload`, data).then((res) => {
+        // store image url in array
+        return { id: res.data.public_id, url: res.data.secure_url };
+      });
+    });
+
+    // wait for all upload promises to resolve
+    Promise.all(uploadPromises).then((results) => {
+      // set some post data
+      const finalData = {
+        ...postData,
+        likes: 0,
+        comments: 0,
+        time: new Date().getTime(),
+        photos: results,
+      };
+
+      axios.post(`http://localhost:5050/posts `, finalData).then((res) => {
+        setPostData((prevState) => ({
+          ...prevState,
+          post: "",
+          location: "",
+          photos: [],
+        }));
+
+        setShowLoader(false); // hide loader
+
+        setShow(false); // hide modal
+      });
+    });
   };
 
   return (
