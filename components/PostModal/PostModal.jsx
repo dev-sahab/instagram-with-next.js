@@ -1,8 +1,13 @@
 "use client";
-import { useRef, useState } from "react";
 import "./PostModal.scss";
+import { useRef, useState } from "react";
+import Image from "next/image.js";
+import axios from "axios";
 import { CiLocationOn } from "react-icons/ci";
 import { GrDown } from "react-icons/gr";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPost, setShowModal } from "@/app/component/timelineSlice.js";
+import { createPost } from "@/app/component/timelineApiSlice.js";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,11 +24,6 @@ import photoUpload from "@/public/img/photo-upload.svg";
 import profile from "@/public/img/shahab.jpg";
 import imoji from "@/public/img/imoji.svg";
 import loading from "@/public/img/loader.svg";
-import Image from "next/image.js";
-import { useDispatch, useSelector } from "react-redux";
-import { selectPost, setShowModal } from "@/app/component/timelineSlice.js";
-import { createPost } from "@/app/component/timelineApiSlice.js";
-import axios from "axios";
 
 const PostModal = () => {
   const dispatch = useDispatch();
@@ -100,7 +100,7 @@ const PostModal = () => {
         const data = new FormData();
 
         // add image to FormData object
-        data.append("photos", img);
+        data.append("file", img);
         data.append("upload_preset", "insta_photo");
         data.append("cloud_name", "diguvpgto");
 
@@ -122,7 +122,7 @@ const PostModal = () => {
               photos: input.photos,
               location: input.location,
               post: input.post,
-              photos: [...results],
+              photos: results,
             })
           );
 
