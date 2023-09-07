@@ -23,6 +23,7 @@ import Image from "next/image.js";
 import { useDispatch, useSelector } from "react-redux";
 import { selectPost, setShowModal } from "@/app/component/timelineSlice.js";
 import { createPost } from "@/app/component/timelineApiSlice.js";
+import axios from "axios";
 
 const PostModal = () => {
   const dispatch = useDispatch();
@@ -86,23 +87,64 @@ const PostModal = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  // submit form data
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    setShowLoader(true); // show loader
+    try {
+      setShowLoader(true); // show loader
 
-    // set some post data
-    dispatch(
-      createPost({
-        photos: input.photos,
-        location: input.location,
-        post: input.post,
-      })
-    );
+      // map the images to an array of upload promises
+      const uploadPromises = input.photos.map(async (img) => {
+        // init a new FormData object
+        const data = new FormData();
 
-    setShowLoader(false); // hide loader
+        // add image to FormData object
+        data.append("photos", img);
+        data.append("upload_preset", "insta_photo");
+        data.append("cloud_name", "diguvpgto");
 
-    dispatch(setShowModal(false)); // hide modal
+        // upload image to cloudinary and return the promise
+        return await axios
+          .post(`https://api.cloudinary.com/v1_1/diguvpgto/image/upload`, data)
+          .then((res) => {
+            // store image url in array
+            return { id: res.data.public_id, url: res.data.secure_url };
+          });
+      });
+
+      // wait for all upload promises to resolve
+      Promise.all(uploadPromises)
+        .then((results) => {
+          // save data to mongoDB
+          dispatch(
+            createPost({
+              photos: input.photos,
+              location: input.location,
+              post: input.post,
+              photos: [...results],
+            })
+          );
+
+          // set empty value after successfuly data save
+          setInput({
+            location: "",
+            post: "",
+            photos: [],
+            characterCount: 0,
+          });
+
+          setShowLoader(false); // hide loader
+          dispatch(setShowModal(false)); // hide modal
+        })
+        .catch((err) => {
+          console.log(err.message);
+          setShowLoader(false); // hide loader
+        });
+    } catch (error) {
+      console.log(error.message);
+      setShowLoader(false); // hide loader
+    }
   };
 
   return (

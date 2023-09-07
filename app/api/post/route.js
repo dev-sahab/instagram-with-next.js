@@ -21,7 +21,6 @@ export const GET = async () => {
   }
 };
 
-
 /**
  * @Desc Create new Post
  * @Route /api/post
