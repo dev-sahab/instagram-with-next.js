@@ -1,6 +1,6 @@
 "use client";
 import LeftSidebar from "@/components/leftSidebar/LeftSidebar.jsx";
-import "./globals.css";
+import "./globals.scss";
 import { Open_Sans } from "next/font/google";
 import { Provider } from "react-redux";
 import store from "@/store/store.js";
@@ -18,7 +18,9 @@ export default function RootLayout({ children }) {
       <body className={openSans.className}>
         <Provider store={store}>
           <LeftSidebar />
-          {children}
+          <div className="main">
+            <div className="main-container">{children}</div>
+          </div>
         </Provider>
       </body>
     </html>

@@ -3,7 +3,6 @@ import { useRef, useState } from "react";
 import "./PostModal.scss";
 import { CiLocationOn } from "react-icons/ci";
 import { GrDown } from "react-icons/gr";
-import axios from "axios";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";

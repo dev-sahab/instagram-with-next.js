@@ -17,81 +17,74 @@ import Timeline from "./component/Timeline.jsx";
 export default function Home() {
   return (
     <>
-      <div className="main">
-        <div className="main-container">
-          <div className="content-wrapper">
-            <div className="story-wrapper">
-              <div className="stroy-box">
-                <button>
-                  <div className="img">
-                    <Image src={story5} alt="" />
-                  </div>
-                  <div className="auth-name">
-                    <span>anahita_h...</span>
-                  </div>
-                </button>
+      <div className="content-wrapper">
+        <div className="story-wrapper">
+          <div className="stroy-box">
+            <button>
+              <div className="img">
+                <Image src={story5} alt="" />
               </div>
-              <div className="stroy-box">
-                <button>
-                  <div className="img">
-                    <Image src={story1} alt="" />
-                  </div>
-                  <div className="auth-name">
-                    <span>anahita_h...</span>
-                  </div>
-                </button>
+              <div className="auth-name">
+                <span>anahita_h...</span>
               </div>
-              <div className="stroy-box">
-                <button>
-                  <div className="img">
-                    <Image src={story2} alt="" />
-                  </div>
-                  <div className="auth-name">
-                    <span>anahita_h...</span>
-                  </div>
-                </button>
-              </div>
-              <div className="stroy-box">
-                <button>
-                  <div className="img">
-                    <Image src={story3} alt="" />
-                  </div>
-                  <div className="auth-name">
-                    <span>anahita_h...</span>
-                  </div>
-                </button>
-              </div>
-              <div className="stroy-box">
-                <button>
-                  <div className="img">
-                    <Image src={story4} alt="" />
-                  </div>
-                  <div className="auth-name">
-                    <span>anahita_h...</span>
-                  </div>
-                </button>
-              </div>
-              <div className="stroy-box">
-                <button>
-                  <div className="img">
-                    <Image src={story6} alt="" />
-                  </div>
-                  <div className="auth-name">
-                    <span>anahita_h...</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            <div className="post-timeline">
-              <Timeline />
-            </div>
+            </button>
           </div>
-
-          <RightSidebar />
+          <div className="stroy-box">
+            <button>
+              <div className="img">
+                <Image src={story1} alt="" />
+              </div>
+              <div className="auth-name">
+                <span>anahita_h...</span>
+              </div>
+            </button>
+          </div>
+          <div className="stroy-box">
+            <button>
+              <div className="img">
+                <Image src={story2} alt="" />
+              </div>
+              <div className="auth-name">
+                <span>anahita_h...</span>
+              </div>
+            </button>
+          </div>
+          <div className="stroy-box">
+            <button>
+              <div className="img">
+                <Image src={story3} alt="" />
+              </div>
+              <div className="auth-name">
+                <span>anahita_h...</span>
+              </div>
+            </button>
+          </div>
+          <div className="stroy-box">
+            <button>
+              <div className="img">
+                <Image src={story4} alt="" />
+              </div>
+              <div className="auth-name">
+                <span>anahita_h...</span>
+              </div>
+            </button>
+          </div>
+          <div className="stroy-box">
+            <button>
+              <div className="img">
+                <Image src={story6} alt="" />
+              </div>
+              <div className="auth-name">
+                <span>anahita_h...</span>
+              </div>
+            </button>
+          </div>
+        </div>
+        <div className="post-timeline">
+          <Timeline />
         </div>
       </div>
-
+      <RightSidebar />
       <PostModal />
     </>
   );
