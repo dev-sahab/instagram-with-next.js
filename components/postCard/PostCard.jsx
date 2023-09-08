@@ -1,6 +1,13 @@
 import Image from "next/image.js";
 import "./PostCard.scss";
 
+// Import Swiper modules styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Keyboard, Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 // images
 import message from "@/public/img/message.svg";
 import notification from "@/public/img/notification.svg";
@@ -49,7 +56,33 @@ export default function PostCard({ user, postData }) {
           <div className="post">
             <div className="image-post">
               <div className="img-wrapper">
-                {/* <Image src={postData.photos} alt="Ali" /> */}
+                <Swiper
+                  slidesPerView={1}
+                  spaceBetween={30}
+                  keyboard={{
+                    enabled: true,
+                  }}
+                  pagination={{
+                    clickable: true,
+                  }}
+                  navigation={true}
+                  modules={[Keyboard, Pagination, Navigation]}
+                  className="mySwiper"
+                >
+                  {postData.photos.map((photo, index) => {
+                    return (
+                      <SwiperSlide key={index}>
+                        <Image
+                          src={photo.url}
+                          alt={photo.id}
+                          width={1000}
+                          height={500}
+                          loading="eager"
+                        />
+                      </SwiperSlide>
+                    );
+                  })}
+                </Swiper>
               </div>
             </div>
           </div>
@@ -87,10 +120,7 @@ export default function PostCard({ user, postData }) {
                   <span>{user?.username}</span>
                 </div>
                 <div className="content">
-                  <p>{
-                    postData.post
-                    }
-                  </p>
+                  <p>{postData.post}</p>
                 </div>
               </div>
               <div className="comment-count">

@@ -19,6 +19,9 @@ export default function Timeline() {
     profileImg:
       "https://res.cloudinary.com/dtpp4gleq/image/upload/v1676271269/Shahab_jymhye.jpg",
   };
+
+  // Reverse the order of the post array
+  const reversedPosts = [...post].reverse();
   return (
     <>
       <div className="post-wrapper">
@@ -26,11 +29,11 @@ export default function Timeline() {
           {post.length == 0 ? (
             <p>No Data Found!</p>
           ) : (
-            post.map((item, index) => {
+            reversedPosts.map((item, index) => {
               if (post.length == 0) {
                 return <p key={index}>Data Not Found</p>;
               } else {
-                return <PostCard key={index} user={userInfo} postData={item}/>;
+                return <PostCard key={index} user={userInfo} postData={item} />;
               }
             })
           )}
