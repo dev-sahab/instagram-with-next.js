@@ -1,5 +1,6 @@
-import Image from "next/image.js";
 import "./PostCard.scss";
+import Image from "next/image.js";
+import timeAgo from "@/utils/timeAgo.js";
 
 // Import Swiper modules styles
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -38,7 +39,7 @@ export default function PostCard({ user, postData }) {
                 <div className="name">
                   <span className="nm">{user?.username}</span>
                   <span className="dot">•</span>
-                  <span className="time">22h</span>
+                  <span className="time">{timeAgo(postData.createdAt)}</span>
                 </div>
                 {postData?.location && (
                   <div className="desc">
