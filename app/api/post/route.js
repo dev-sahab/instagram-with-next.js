@@ -42,3 +42,24 @@ export const POST = async (request) => {
     return NextResponse.json({ error: error.message });
   }
 };
+
+/**
+ * @Desc Delete Post
+ * @Route /api/post
+ * @METHOD DELETE
+ * @Access public
+ */
+export const DELETE = async (request) => {
+  try {
+
+    await mongoDBConnection();
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    const post = await Post.findByIdAndDelete(id);
+
+    return NextResponse.json({ message: "Post Deleted", post });
+  } catch (error) {
+    return NextResponse.json({ error: error.message });
+  }
+};

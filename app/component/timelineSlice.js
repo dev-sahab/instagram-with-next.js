@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createPost, fetchPosts } from "./timelineApiSlice.js";
+import { createPost, deletePost, fetchPosts } from "./timelineApiSlice.js";
 
 const timelineSlice = createSlice({
   name: "post",
@@ -21,6 +21,9 @@ const timelineSlice = createSlice({
       })
       .addCase(createPost.fulfilled, (state, action) => {
         state.post.push(action.payload.post);
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.post = state.post.filter((data) => data._id !== action.payload);
       });
   },
 });

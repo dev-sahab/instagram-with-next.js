@@ -1,3 +1,4 @@
+"use client";
 import "./PostCard.scss";
 import Image from "next/image.js";
 import timeAgo from "@/utils/timeAgo.js";
@@ -17,8 +18,37 @@ import liked from "@/public/img/liked.svg";
 import comment from "@/public/img/comment.svg";
 import save from "@/public/img/save.svg";
 import imoji from "@/public/img/imoji.svg";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { deletePost } from "@/app/component/timelineApiSlice.js";
 
 export default function PostCard({ user, postData }) {
+  const dispatch = useDispatch();
+  const [toggle, setToggle] = useState(false);
+  const handleUseToggle = () => {
+    setToggle(!toggle);
+  };
+
+  const dropDownRef = useRef(null);
+
+  const handleClickOutside = (e) => {
+    if (dropDownRef.current && !dropDownRef.current.contains(e.target)) {
+      setToggle(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // delete post
+  const handleDeletePost = (id) => {
+    dispatch(deletePost(id));
+  };
   return (
     <>
       <article>
@@ -48,10 +78,19 @@ export default function PostCard({ user, postData }) {
                 )}
               </div>
             </div>
-            <div className="action">
-              <button>
+            <div className="action dropdown" ref={dropDownRef}>
+              <button onClick={handleUseToggle}>
                 <Image src={dot} alt="" />
               </button>
+              <div className={`dropdown-menu ${toggle && "show"}`}>
+                <button className="dropdown-item">Edit</button>
+                <button
+                  className="dropdown-item"
+                  onClick={() => handleDeletePost(postData._id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
           <div className="post">

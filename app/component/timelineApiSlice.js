@@ -38,3 +38,24 @@ export const createPost = createAsyncThunk("post/createPost", async (data) => {
   // return data
   return response.data;
 });
+
+/**
+ * @Desc Delete Post
+ * @Route /api/post?id=123
+ * @METHOD DELETE
+ * @Access public
+ */
+export const deletePost = createAsyncThunk("post/deletePost", async (id) => {
+  // call api
+  const response = await axios.delete(
+    `http://localhost:3000/api/post?id=${id}`
+  );
+
+  // data not found condition
+  if (!response.data) {
+    throw new Error("Data not created");
+  }
+
+  // return data
+  return response.data.post._id;
+});
